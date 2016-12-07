@@ -83,8 +83,9 @@ function getStatus(token) {
   );
 }
 
-console.log('Attempting to log in with user ' + process.env.PARTICLE_USER + ' and password ' + process.env.PARTICLE_PASS + '.');
-particle.login({username: process.env.PARTICLE_USER, password: process.env.PARTICLE_PASS}).then(
+var unescapedPassword = process.env.PARTICLE_PASS.replace('\\', ''); // ¯\_(ツ)_/¯
+console.log('Attempting to log in with user ' + process.env.PARTICLE_USER + ' and password ' + unescapedPassword + '.');
+particle.login({username: process.env.PARTICLE_USER, password: unescapedPassword}).then(
   function(data) {
     var token = data.body.access_token;
     var devicesPr = particle.listDevices({ auth: token });
