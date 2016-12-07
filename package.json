@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^2.0.0",
     "particle-api-js": "^6.4.0",
     "q": "^1.4.1",
     "twitter": "^1.5.0"
