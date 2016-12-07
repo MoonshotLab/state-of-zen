@@ -82,7 +82,7 @@ function getStatus(token) {
   );
 }
 
-
+console.log('Attempting to log in with user ' + env.PARTICLE_USER + ' and password ' + env.PARTICLE_PASS + '.');
 particle.login({username: env.PARTICLE_USER, password: env.PARTICLE_PASS}).then(
   function(data) {
     var token = data.body.access_token;
