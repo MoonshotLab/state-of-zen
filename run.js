@@ -37,7 +37,6 @@ function getRoomStatus(room1, room2) {
 
 function getStatus(token) {
   console.log('Running...');
-  var update = false;
 
   leftPr = particle.getDevice({ deviceId: leftRoomID, auth: token });
   rightPr = particle.getDevice({ deviceId: rightRoomID, auth: token });
@@ -48,34 +47,23 @@ function getStatus(token) {
         var body = deviceData[i].body;
 
         if (body.id == leftRoomID) {
-          if (leftRoomOccupied != !!body.connected) {
-            update = true;
-            leftRoomOccupied = !!body.connected;
-          }
+          leftRoomOccupied = !!body.connected;
         }
 
         if (body.id == rightRoomID) {
-          if (rightRoomOccupied != !!body.connected) {
-            update = true;
-            rightRoomOccupied = !!body.connected;
-          }
+          rightRoomOccupied = !!body.connected;
         }
-
       }
 
-      if (update) {
-        var roomStatus = getRoomStatus(leftRoomOccupied, rightRoomOccupied);
+      var roomStatus = getRoomStatus(leftRoomOccupied, rightRoomOccupied);
 
-        client.post('statuses/update', { status: roomStatus }, function(error, tweet, response) {
-          if (error) {
-            console.log('Error tweeting: ' + error[0].message);
-          } else {
-            console.log('Successfully tweeted.');
-          }
-        });
-      } else {
-        console.log('No update.');
-      }
+      client.post('statuses/update', { status: roomStatus }, function(error, tweet, response) {
+        if (error) {
+          console.log('Error tweeting "' + roomStatus + '": ' + error[0].message);
+        } else {
+          console.log('Successfully tweeted "' + tweet.text + '".');
+        }
+      });
     },
     function(err) {
       console.log(err);
