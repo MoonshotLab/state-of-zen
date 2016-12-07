@@ -1,6 +1,5 @@
 # State of Zen
 
-## ॐ
 Automatically tweets the status of the two Zen Rooms on the 4th floor of Barkley.
 
 ## How it Works
