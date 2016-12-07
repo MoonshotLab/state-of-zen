@@ -1,6 +1,7 @@
-# state-of-zen
+# State of Zen
 
-Automatically tweet the status of the two Zen Rooms on the 4th floor of Barkley.
+## ॐ
+Automatically tweets the status of the two Zen Rooms on the 4th floor of Barkley.
 
 ## How it Works
 There's a Particle Photon attached to each light indicating whether or not each Zen Room is occupied. This script checks every minute or so to see if the Photon is powered. If so, the room is occupied. Any time the status of either room changes, we send a tweet to [@CanIZen](https://twitter.com/CanIZen).
