@@ -62,34 +62,38 @@ function getStatus(token) {
           console.log('Error getting timeline: ' + error[0].message);
         }
 
-        tweets.forEach(function(tweet, index) {
-          if (index === 0) { // if it's the most recent tweet
-            if (tweet.text != roomStatus) { // and it is different from current status, delete
-              console.log('Status has changed. Destroying old tweet.');
-              client.post('statuses/destroy/' + tweet.id_str, function(error, tweet, response) {
-                if (error) console.log('Error destroying tweet: ' + error[0].message);
-              });
+        try {
+          tweets.forEach(function(tweet, index) {
+            if (index === 0) { // if it's the most recent tweet
+              if (tweet.text != roomStatus) { // and it is different from current status, delete
+                console.log('Status has changed. Destroying old tweet.');
+                client.post('statuses/destroy/' + tweet.id_str, function(error, tweet, response) {
+                  if (error) console.log('Error destroying tweet: ' + error[0].message);
+                });
 
-              client.post('statuses/update', { status: roomStatus }, function(error, tweet, response) {
-                if (error) {
-                  console.log('Error tweeting "' + roomStatus + '": ' + error[0].message);
-                } else {
-                  console.log('Successfully tweeted "' + tweet.text + '".');
-                }
-              });
+                client.post('statuses/update', { status: roomStatus }, function(error, tweet, response) {
+                  if (error) {
+                    console.log('Error tweeting "' + roomStatus + '": ' + error[0].message);
+                  } else {
+                    console.log('Successfully tweeted "' + tweet.text + '".');
+                  }
+                });
+              } else {
+                console.log('Status has not changed'); // leave it alone
+              }
             } else {
-              console.log('Status has not changed'); // leave it alone
+              // delete all other tweets (there shouldn't ever be more than one)
+              if (tweet.id_str !== firstTweetId) { // don't delete pinned tweet
+                console.log('Deleting old tweet ' + tweet.id_str);
+                client.post('statuses/destroy/' + tweet.id_str, function(error, tweet, response) {
+                  if (error) console.log('Error destroying tweet: ' + error[0].message);
+                });
+              }
             }
-          } else {
-            // delete all other tweets (there shouldn't ever be more than one)
-            if (tweet.id_str !== firstTweetId) { // don't delete pinned tweet
-              console.log('Deleting old tweet ' + tweet.id_str);
-              client.post('statuses/destroy/' + tweet.id_str, function(error, tweet, response) {
-                if (error) console.log('Error destroying tweet: ' + error[0].message);
-              });
-            }
-          }
-        });
+          });
+        } catch(ex) {
+          console.log('Error iterating over tweets: ' + ex);
+        }
       });
     },
     function(error) {
