@@ -59,7 +59,11 @@ function getStatus(token) {
 
       client.get('statuses/user_timeline', function(error, tweets, response) {
         if (error) {
-          console.log('Error getting timeline: ' + error[0].message);
+          try {
+            console.log('Error getting timeline: ' + error[0].message);
+          } catch(ex) {
+            console.log('Error getting timeline: ' + ex);
+          }
         }
 
         try {
